@@ -1,0 +1,15 @@
+body{
+  background: black;
+}
+aside{
+  width: 25%;
+  height: 100%;
+}
+.main{
+  width: 75%;
+  height: 100%;
+}
+.mainWrapper{
+  height: 100Vh;
+}
+

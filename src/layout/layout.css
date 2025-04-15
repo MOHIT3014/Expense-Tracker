@@ -1,0 +1,12 @@
+nav{
+    height: 100%;
+}
+.nav-link.nav-hover {
+    transition: all 0.3s ease;
+}
+
+.nav-link.nav-hover:hover {
+    color: #ffc107 !important;
+    transform: scale(1.05);
+    text-decoration: underline;
+}
