@@ -6,14 +6,14 @@ import './layout.css';
 const ExpenseNavbar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userName, setUserName] = useState("Guest");
-    const [profilePic, setProfilePic] = useState("https://www.w3schools.com/howto/img_avatar.png");
+    const [profilePic, setProfilePic] = useState("user.jpg");
 
     useEffect(() => {
         const user = JSON.parse(sessionStorage.getItem("user"));
         if (user) {
             setIsLoggedIn(true);
             setUserName(user.name || "User");
-            setProfilePic(user.profilePic || "https://www.w3schools.com/howto/img_avatar.png");
+            setProfilePic(user.profilePic || "user.jpg");
         }
     }, []);
 
@@ -21,7 +21,7 @@ const ExpenseNavbar = () => {
         sessionStorage.removeItem("user");
         setIsLoggedIn(false);
         setUserName("Guest");
-        setProfilePic("https://www.w3schools.com/howto/img_avatar.png");
+        setProfilePic("user.jpg");
         window.location.href = "/login";
     };
 
