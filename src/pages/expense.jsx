@@ -75,7 +75,7 @@ const ExpensePage = () => {
         });
     };
 
-    // Pagination logic
+    
     const indexOfLastTx = currentPage * transactionsPerPage;
     const indexOfFirstTx = indexOfLastTx - transactionsPerPage;
     const currentTransactions = transactions.slice(indexOfFirstTx, indexOfLastTx);
@@ -96,9 +96,9 @@ const ExpensePage = () => {
                     <h2>Welcome, {user.name} 👋</h2>
                     <h4>Your Transactions</h4>
 
-                    {/* Form */}
+                    
                     <Form onSubmit={handleFormSubmit} className="mb-4">
-                        {/* ... form fields (unchanged) ... */}
+                        
                         <Form.Group className="mb-2">
                             <Form.Label>Title</Form.Label>
                             <Form.Control
@@ -157,7 +157,7 @@ const ExpensePage = () => {
                         </Button>
                     </Form>
 
-                    {/* Transaction List with Pagination */}
+                    
                     {transactions.length === 0 ? (
                         <p>No transactions available.</p>
                     ) : (
@@ -191,7 +191,7 @@ const ExpensePage = () => {
                                 ))}
                             </ul>
 
-                            {/* Pagination Buttons */}
+                            
                             <div className="d-flex justify-content-between mt-3">
                                 <Button variant="secondary" disabled={currentPage === 1} onClick={goToPrevPage}>
                                     ⬅️ Previous
