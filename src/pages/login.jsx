@@ -32,7 +32,7 @@ const LoginPage = () => {
 
   return (
     <div className="container mt-5">
-      <div className="container" style={{ width: "400px" }}>
+      <div className="container" style={{ width: "auto" }}>
       <h2>Login</h2>
       <Form>
         <Form.Group className="mb-3" controlId="formBasicEmail">
