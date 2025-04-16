@@ -7,13 +7,17 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const ExpensePage = () => {
     const [user, setUser] = useState(null);
     const [transactions, setTransactions] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const transactionsPerPage = 10;
+
     const [newTransaction, setNewTransaction] = useState({
         title: "",
         amount: "",
         category: "General",
         date: new Date().toISOString().substring(0, 10),
-        type: "expense", 
+        type: "expense",
     });
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,7 +26,6 @@ const ExpensePage = () => {
             navigate("/login");
         } else {
             setUser(loggedInUser);
-
             const userTransactions = JSON.parse(localStorage.getItem(loggedInUser.email)) || [];
             setTransactions(userTransactions);
         }
@@ -72,6 +75,20 @@ const ExpensePage = () => {
         });
     };
 
+    // Pagination logic
+    const indexOfLastTx = currentPage * transactionsPerPage;
+    const indexOfFirstTx = indexOfLastTx - transactionsPerPage;
+    const currentTransactions = transactions.slice(indexOfFirstTx, indexOfLastTx);
+    const totalPages = Math.ceil(transactions.length / transactionsPerPage);
+
+    const goToNextPage = () => {
+        if (currentPage < totalPages) setCurrentPage(prev => prev + 1);
+    };
+
+    const goToPrevPage = () => {
+        if (currentPage > 1) setCurrentPage(prev => prev - 1);
+    };
+
     return (
         <div className="container mt-5">
             {user ? (
@@ -79,8 +96,9 @@ const ExpensePage = () => {
                     <h2>Welcome, {user.name} 👋</h2>
                     <h4>Your Transactions</h4>
 
-                    {/* Add Transaction Form */}
+                    {/* Form */}
                     <Form onSubmit={handleFormSubmit} className="mb-4">
+                        {/* ... form fields (unchanged) ... */}
                         <Form.Group className="mb-2">
                             <Form.Label>Title</Form.Label>
                             <Form.Control
@@ -139,42 +157,54 @@ const ExpensePage = () => {
                         </Button>
                     </Form>
 
-                    {/* List of Transactions */}
+                    {/* Transaction List with Pagination */}
                     {transactions.length === 0 ? (
                         <p>No transactions available.</p>
                     ) : (
-                        <ul className="list-group">
-                            {transactions.slice(0, 10).map((tx) => (
-                                <li
-                                    key={tx.id}
-                                    className={`list-group-item d-flex justify-content-between align-items-center ${
-                                        tx.type === "expense" ? "list-group-item-danger" : "list-group-item-success"
-                                    }`}
-                                >
-                                    <div>
-                                        <strong>{tx.title}</strong> <br />
-                                        <small>{new Date(tx.date).toLocaleString()}</small> <br />
-                                        <small>Category: {tx.category}</small>
-                                    </div>
-                                    <div>
-                                        <strong>
-                                            {tx.type === "expense" ? "- $" : "+ $"}
-                                            {tx.amount}
-                                        </strong>
-                                    </div>
-                                    <Button
-                                        variant="danger"
-                                        size="sm"
-                                        onClick={() => handleDelete(tx.id)}
+                        <>
+                            <ul className="list-group">
+                                {currentTransactions.map((tx) => (
+                                    <li
+                                        key={tx.id}
+                                        className={`list-group-item d-flex justify-content-between align-items-center ${tx.type === "expense" ? "list-group-item-danger" : "list-group-item-success"
+                                            }`}
                                     >
-                                        Delete
-                                    </Button>
-                                </li>
-                            ))}
-                        </ul>
+                                        <div>
+                                            <strong>{tx.title}</strong> <br />
+                                            <small>{new Date(tx.date).toLocaleString()}</small> <br />
+                                            <small>Category: {tx.category}</small>
+                                        </div>
+                                        <div>
+                                            <strong>
+                                                {tx.type === "expense" ? "- $" : "+ $"}
+                                                {tx.amount}
+                                            </strong>
+                                        </div>
+                                        <Button
+                                            variant="danger"
+                                            size="sm"
+                                            onClick={() => handleDelete(tx.id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            {/* Pagination Buttons */}
+                            <div className="d-flex justify-content-between mt-3">
+                                <Button variant="secondary" disabled={currentPage === 1} onClick={goToPrevPage}>
+                                    ⬅️ Previous
+                                </Button>
+                                <span>Page {currentPage} of {totalPages}</span>
+                                <Button variant="secondary" disabled={currentPage === totalPages} onClick={goToNextPage}>
+                                    Next ➡️
+                                </Button>
+                            </div>
+                        </>
                     )}
 
-                    <Button variant="danger" onClick={handleLogout} className="mt-3">
+                    <Button variant="danger" onClick={handleLogout} className="mt-4">
                         Logout
                     </Button>
                 </>
